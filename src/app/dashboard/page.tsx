@@ -1,4 +1,7 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import { columns } from "@/components/apps/columns"
+import { Application } from "@/lib/Application.type"
+import { DataTable } from "@/components/apps/DataTable"
 import { Badge } from "@/components/ui/badge"
 import {
   Breadcrumb,
@@ -15,9 +18,17 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Box, CircleCheck, TrendingUp, Users } from "lucide-react"
+import { Box, CircleCheck, Server, TrendingUp, Users } from "lucide-react"
+import dummyData from "@/lib/dummyData"
 
-export default function Page() {
+
+async function getData(): Promise<Application[]> {
+  // Fetch data from your API here.
+  return dummyData
+}
+
+export default async function Page() {
+  const data = await getData()
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -72,7 +83,7 @@ export default function Page() {
                 <Box className="text-orange-500 w-10 h-10" />
               </div>
             </Card>
-            
+
             <Card className="flex flex-row items-center h-fit justify-between px-4">
               <div className="flex flex-col items-start justify-center ">
                 <div className="flex flex-row items-center gap-2">
@@ -85,12 +96,14 @@ export default function Page() {
                 <p className="text-4xl font-bold">Aktif</p>
 
               </div>
-              <div className="flex items-center bg-blue-200/75 rounded-xl h-fit w-fit p-4">
-                <Users className="text-blue-500 w-10 h-10" />
+              <div className="flex items-center bg-green-200/75 rounded-xl h-fit w-fit p-4">
+                <Server className="text-green-500 w-10 h-10" />
               </div>
             </Card>
           </div>
-          <div className="bg-primary min-h-[100vh] flex-1 rounded-xl md:min-h-min" />
+          <div className="bg-card min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+            <DataTable columns={columns} data={data} />
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
