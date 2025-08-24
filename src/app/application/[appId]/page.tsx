@@ -89,7 +89,7 @@ export default function AppPage({ params }: { params: Promise<{ appId: string }>
         <Button 
           variant="ghost" 
           onClick={() => router.back()}
-          className="gap-2 p-0 h-auto text-muted-foreground hover:text-foreground"
+          className=" p-0 h-auto text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
           Geri Dön
