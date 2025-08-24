@@ -14,6 +14,7 @@ export type Application = {
     scopes: string[]
 }
 export type User = {
+    image: string
     id: string
     name: string
     email: string

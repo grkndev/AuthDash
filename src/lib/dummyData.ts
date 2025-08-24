@@ -6,6 +6,7 @@ const dummyUser: User = {
     email: "john.doe@example.com",
     created_at: "2021-01-01",
     updated_at: "2021-01-01",
+    image: "https://github.com/shadcn.png"
 }
 
 

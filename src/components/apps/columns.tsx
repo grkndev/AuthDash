@@ -69,7 +69,7 @@ export const columns: ColumnDef<Application>[] = [
             const app = row.original
 
             return (
-                <Link href={`/apps/${app.id}`}>
+                <Link href={`/application/${app.id}`}>
                     <Button variant="outline" className="h-8 w-8 p-0">
                         <ChevronRight className="h-4 w-4" />
                     </Button>
