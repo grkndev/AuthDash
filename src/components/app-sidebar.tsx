@@ -28,6 +28,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { usePathname } from "next/navigation"
 
 // This is sample data.
 const data = {
@@ -69,6 +70,7 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
