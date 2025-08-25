@@ -18,8 +18,11 @@ export type User = {
     id: string
     name: string
     email: string
+    role: UserRole
+    status: UserStatus
     created_at: string
     updated_at: string
+    last_login?: string
 }
 
 export enum ApplicationStatus {
@@ -27,4 +30,18 @@ export enum ApplicationStatus {
     INACTIVE = "Inactive",
     SUSPENDED = "Suspended",
     BANNED = "Banned",
+}
+
+export enum UserStatus {
+    ACTIVE = "Active",
+    INACTIVE = "Inactive",
+    SUSPENDED = "Suspended",
+    BANNED = "Banned",
+}
+
+export enum UserRole {
+    ADMIN = "Admin",
+    USER = "User",
+    MODERATOR = "Moderator",
+    DEVELOPER = "Developer",
 }

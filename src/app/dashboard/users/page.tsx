@@ -1,0 +1,38 @@
+import React from 'react'
+import { columns } from "@/components/users/columns"
+import { User } from "@/lib/Application.type"
+import { UserDataTable } from "@/components/users/UserDataTable"
+import { Badge } from "@/components/ui/badge"
+import { Card } from "@/components/ui/card"
+import { TrendingUp, Users, UserCheck, UserX, Crown } from "lucide-react"
+import { dummyUsers } from "@/lib/dummyData"
+
+async function getData(): Promise<User[]> {
+  // Fetch data from your API here.
+  return dummyUsers
+}
+
+export default async function UsersPage() {
+  const data = await getData()
+  
+  // Calculate statistics
+  const totalUsers = data.length
+  const activeUsers = data.filter(user => user.status === "Active").length
+  const inactiveUsers = data.filter(user => user.status === "Inactive").length
+  const adminUsers = data.filter(user => user.role === "Admin").length
+  const growthPercentage = Math.round(((activeUsers - inactiveUsers) / totalUsers) * 100)
+
+  return (
+    <div className="flex flex-1 flex-col gap-2 p-4 pt-0">
+        <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-row items-center gap-2">
+                <Users className="w-6 h-6 stroke-3" />
+                <h1 className="text-xl font-medium">Kullanıcılar</h1>
+            </div>
+        </div>
+      <div className="bg-card min-h-[100vh] flex-1 rounded-xl md:min-h-min">
+        <UserDataTable columns={columns} data={data} />
+      </div>
+    </div>
+  )
+}
