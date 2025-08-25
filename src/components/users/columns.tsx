@@ -17,6 +17,7 @@ import { User as UserType, UserRole, UserStatus } from "@/lib/Application.type"
 import { Badge } from "../ui/badge"
 import UserBadgeStatus from "./UserBadgeStatus"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from "next/link"
 
 function getRoleIcon(role: UserRole) {
     switch (role) {
@@ -129,7 +130,9 @@ export const columns: ColumnDef<UserType>[] = [
                             Kullanıcı ID'sini kopyala
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem>Kullanıcıyı Görüntüle</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link href={`/user/${user.id}`}>Kullanıcıyı Görüntüle</Link>
+                        </DropdownMenuItem>
                         <DropdownMenuItem>Profili Düzenle</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {user.status === UserStatus.ACTIVE ? (
