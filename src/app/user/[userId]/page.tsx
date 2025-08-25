@@ -54,6 +54,12 @@ export default function UserPage({ params }: { params: Promise<{ userId: string 
     alert('Kullanıcı bilgileri güncellendi!')
   }
 
+  const handleUserUpdate = (updatedUser: User) => {
+    setUser(updatedUser)
+    // Gerçek uygulamada API'ye gönderilecek
+    console.log('User updated:', updatedUser)
+  }
+
 
 
   if (!user) {
@@ -87,7 +93,10 @@ export default function UserPage({ params }: { params: Promise<{ userId: string 
           onSubmit={handleSubmit}
         />
         
-        <UserStatistics user={user} />
+        <UserStatistics 
+          user={user} 
+          onUserUpdate={handleUserUpdate}
+        />
       </div>
 
       <Separator />

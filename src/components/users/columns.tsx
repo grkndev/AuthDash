@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, MoreHorizontal, Shield, User, Wrench } from "lucide-react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +13,16 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
 import { DataTableColumnHeader } from "../apps/data-table-column-header"
 import { User as UserType, UserRole, UserStatus } from "@/lib/Application.type"
 import { Badge } from "../ui/badge"
@@ -113,44 +124,142 @@ export const columns: ColumnDef<UserType>[] = [
         id: "actions",
         cell: ({ row }) => {
             const user = row.original
+            const [suspendDialogOpen, setSuspendDialogOpen] = useState(false)
+            const [unsuspendDialogOpen, setUnsuspendDialogOpen] = useState(false)
+            const [banDialogOpen, setBanDialogOpen] = useState(false)
+
+            const handleSuspendUser = () => {
+                // TODO: Implement suspend user API call
+                console.log('Suspending user:', user.id)
+                setSuspendDialogOpen(false)
+            }
+
+            const handleUnsuspendUser = () => {
+                // TODO: Implement unsuspend user API call
+                console.log('Unsuspending user:', user.id)
+                setUnsuspendDialogOpen(false)
+            }
+
+            const handleBanUser = () => {
+                // TODO: Implement ban user API call
+                console.log('Banning user:', user.id)
+                setBanDialogOpen(false)
+            }
 
             return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Menüyü aç</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => navigator.clipboard.writeText(user.id)}
-                        >
-                            Kullanıcı ID'sini kopyala
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem asChild>
-                            <Link href={`/user/${user.id}`}>Kullanıcıyı Görüntüle</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>Profili Düzenle</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        {user.status === UserStatus.ACTIVE ? (
-                            <DropdownMenuItem className="text-yellow-600">
-                                Kullanıcıyı Askıya Al
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-8 w-8 p-0">
+                                <span className="sr-only">Menüyü aç</span>
+                                <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>İşlemler</DropdownMenuLabel>
+                            <DropdownMenuItem
+                                onClick={() => navigator.clipboard.writeText(user.id)}
+                            >
+                                Kullanıcı ID'sini kopyala
                             </DropdownMenuItem>
-                        ) : user.status === UserStatus.SUSPENDED ? (
-                            <DropdownMenuItem className="text-green-600">
-                                Askıyı Kaldır
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem asChild>
+                                <Link href={`/user/${user.id}`}>Kullanıcıyı Görüntüle</Link>
                             </DropdownMenuItem>
-                        ) : null}
-                        {user.status !== UserStatus.BANNED && (
-                            <DropdownMenuItem className="text-red-600">
-                                Kullanıcıyı Yasakla
-                            </DropdownMenuItem>
-                        )}
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                          
+                            <DropdownMenuSeparator />
+                            {user.status === UserStatus.ACTIVE ? (
+                                <DropdownMenuItem 
+                                    className="text-yellow-600"
+                                    onClick={() => setSuspendDialogOpen(true)}
+                                >
+                                    Kullanıcıyı Askıya Al
+                                </DropdownMenuItem>
+                            ) : user.status === UserStatus.SUSPENDED ? (
+                                <DropdownMenuItem 
+                                    className="text-green-600"
+                                    onClick={() => setUnsuspendDialogOpen(true)}
+                                >
+                                    Askıyı Kaldır
+                                </DropdownMenuItem>
+                            ) : null}
+                            {user.status !== UserStatus.BANNED && (
+                                <DropdownMenuItem 
+                                    className="text-red-600"
+                                    onClick={() => setBanDialogOpen(true)}
+                                >
+                                    Kullanıcıyı Yasakla
+                                </DropdownMenuItem>
+                            )}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {/* Suspend User Dialog */}
+                    <AlertDialog open={suspendDialogOpen} onOpenChange={setSuspendDialogOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Kullanıcıyı Askıya Al</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <strong>{user.name}</strong> kullanıcısını askıya almak istediğinizden emin misiniz?
+                                    Bu işlem kullanıcının hesabını geçici olarak devre dışı bırakacaktır.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                <AlertDialogAction 
+                                    onClick={handleSuspendUser}
+                                    className="bg-yellow-600 hover:bg-yellow-700"
+                                >
+                                    Askıya Al
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+
+                    {/* Unsuspend User Dialog */}
+                    <AlertDialog open={unsuspendDialogOpen} onOpenChange={setUnsuspendDialogOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Askıyı Kaldır</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <strong>{user.name}</strong> kullanıcısının askısını kaldırmak istediğinizden emin misiniz?
+                                    Bu işlem kullanıcının hesabını tekrar aktif hale getirecektir.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                <AlertDialogAction 
+                                    onClick={handleUnsuspendUser}
+                                    className="bg-green-600 hover:bg-green-700"
+                                >
+                                    Askıyı Kaldır
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+
+                    {/* Ban User Dialog */}
+                    <AlertDialog open={banDialogOpen} onOpenChange={setBanDialogOpen}>
+                        <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Kullanıcıyı Yasakla</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    <strong>{user.name}</strong> kullanıcısını yasaklamak istediğinizden emin misiniz?
+                                    Bu işlem kullanıcının hesabını devre dışı bırakacaktır. İşlem daha sonra yönetim panelinden geri alınabilir.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>İptal</AlertDialogCancel>
+                                <AlertDialogAction 
+                                    onClick={handleBanUser}
+                                    className="bg-red-600 hover:bg-red-700"
+                                >
+                                    Yasakla
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                </>
             )
         },
     },
