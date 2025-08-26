@@ -2,9 +2,7 @@ import React from 'react'
 import { columns } from "@/components/users/columns"
 import { User } from "@/lib/Application.type"
 import { UserDataTable } from "@/components/users/UserDataTable"
-import { Badge } from "@/components/ui/badge"
-import { Card } from "@/components/ui/card"
-import { TrendingUp, Users, UserCheck, UserX, Crown } from "lucide-react"
+import { Users } from "lucide-react"
 import { dummyUsers } from "@/lib/dummyData"
 
 async function getData(): Promise<User[]> {
@@ -15,12 +13,6 @@ async function getData(): Promise<User[]> {
 export default async function UsersPage() {
   const data = await getData()
   
-  // Calculate statistics
-  const totalUsers = data.length
-  const activeUsers = data.filter(user => user.status === "Active").length
-  const inactiveUsers = data.filter(user => user.status === "Inactive").length
-  const adminUsers = data.filter(user => user.role === "Admin").length
-  const growthPercentage = Math.round(((activeUsers - inactiveUsers) / totalUsers) * 100)
 
   return (
     <div className="flex flex-1 flex-col gap-2 p-4 pt-0">
